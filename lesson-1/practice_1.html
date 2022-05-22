@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="products"></div>
+
+    <script>
+      // Степень числа
+
+      Math.pow(2, 3); // раньше
+      2 ** 3; // сейчас
+
+      var obj = {
+        a: 1,
+        b: 2,
+      };
+
+      // arr.push(obj.a);
+      // arr.push(obj.b);
+
+      // добавить элемент в массив быстро
+
+      var arr = Object.values(obj); // значения
+      console.log(arr);
+
+      var arr = Object.keys(obj); // навзания свойств
+      console.log(arr);
+
+      let box = {
+        color: "green",
+        position: 10,
+        clickMe: function () {
+          document
+            .querySelector("button")
+            .addEventListener("ckick", function () {
+              console.log(this);
+              console.log(
+                `Увет контейнера ${this.color}, номер ${this.position}`
+              );
+            });
+        },
+      };
+    </script>
+  </body>
+</html>
