@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const hamburgerList = {
+        small: { price: 50, calories: 20 },
+        big: { price: 100, calories: 40 },
+      };
+
+      const stuffingList = {
+        cheese: { price: 10, calories: 20 },
+        salat: { price: 20, calories: 5 },
+        potato: { price: 15, calories: 10 },
+      };
+
+      const toppingList = {
+        spice: { price: 15, calories: 0 },
+        mayo: { price: 20, calories: 5 },
+      };
+
+      class Hamburger {
+        constructor(size, stuffing) {
+          this.size = size;
+          this.checkSize();
+          this.stuffing = stuffing;
+          this.checkStuffing();
+          this.price = hamburgerList[size].price;
+          this.calories = hamburgerList[size].calories;
+          this.toppingEls = [];
+        }
+
+        checkSize() {
+          for (let key in hamburgerList) {
+            if (this.size === key) {
+              return;
+              // console.error(`Такого размера нет`);
+            }
+
+            // if (this.size !== key) {
+            //   throw new Error(`Такого размера нет`);
+            // } else if (this.size === key) {
+            //   return;
+            // }
+          }
+        }
+
+        checkStuffing() {
+          for (let key in stuffingList) {
+            try {
+              if (this.stuffing === key) {
+                return;
+              }
+            } catch (e) {
+              throw new Error(`Такой начинки нет`);
+            }
+          }
+        }
+
+        addTopping(topping) {
+          const toppingEl = topping;
+          this.price += toppingList[topping].price;
+          this.calories += toppingList[topping].calories;
+          this.toppingEls.push(toppingEl);
+          console.log(`Дополнительно добавили "${topping}".`);
+        }
+
+        removeTopping(topping) {
+          const toppingEl = topping;
+          this.price -= toppingList[topping].price;
+          this.calories -= toppingList[topping].calories;
+          this.toppingEls.pop(toppingEl);
+          console.log(`Удалили добавку "${topping}".`);
+        }
+
+        getTopping(topping) {
+          console.log(
+            `Вы выбрали следующие добавки: "${this.toppingEls.join(", ")}".`
+          );
+        }
+
+        getSize() {
+          console.log(`Выбран размер бургера: "${this.size}".`);
+        }
+
+        getStuffing() {
+          console.log(`Выбрана начинка для бургера: "${this.stuffing}".`);
+        }
+
+        calculatePrice() {
+          console.log(`Итоговая стоимость товара: "${this.price} р".`);
+          return this.price;
+        }
+
+        calculateCalories() {
+          console.log(`Итоговая калорийность: "${this.calories} кКал".`);
+          return this.calories;
+        }
+      }
+
+      // =======================================
+      const burger1 = new Hamburger("big", "cheese");
+      console.log(burger1);
+      burger1.addTopping("mayo");
+      burger1.addTopping("mayo");
+      burger1.addTopping("spice");
+      burger1.removeTopping("mayo");
+      burger1.getSize();
+      burger1.getStuffing();
+      burger1.getTopping();
+      burger1.calculatePrice();
+      burger1.calculateCalories();
+      console.log(burger1);
+
+      const burger2 = new Hamburger("big", "potato");
+      console.log(burger2);
+    </script>
+  </body>
+</html>
