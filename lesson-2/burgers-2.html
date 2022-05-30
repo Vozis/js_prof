@@ -24,15 +24,35 @@
         mayo: { price: 20, calories: 5 },
       };
 
+      class Param {
+        constructor(element) {
+          // this.name = element.value;
+          this.price = +element.price;
+          this.calories = +element.calories;
+        }
+      }
+
       class Hamburger {
-        constructor(size, stuffing, toppings) {
-          this.size = size;
+        constructor(size, stuffing, topping) {
+          this.size = new Param(this.getSize(size));
           // this.checkSize();
-          this.stuffing = stuffing;
-          this.toppingEls = toppings;
+          this.stuffing = new Param(this.getStuffing(stuffing));
+          this.toppingEls = new Param(this.getTopping(topping));
           // this.checkStuffing();
           this.price = 0;
           this.calories = 0;
+        }
+
+        getSize(name) {
+          return hamburgerList[name];
+        }
+
+        getStuffing(name) {
+          return stuffingList[name];
+        }
+
+        getTopping(name) {
+          return toppingList[name];
         }
 
         // checkSize() {
@@ -76,17 +96,17 @@
           console.log(`Удалили добавку "${topping}".`);
         }
 
-        getTopping(topping) {
+        showTopping(topping) {
           console.log(
             `Вы выбрали следующие добавки: "${this.toppingEls.join(", ")}".`
           );
         }
 
-        getSize() {
+        showSize() {
           console.log(`Выбран размер бургера: "${this.size}".`);
         }
 
-        getStuffing() {
+        showStuffing() {
           console.log(`Выбрана начинка для бургера: "${this.stuffing}".`);
         }
 
@@ -101,9 +121,7 @@
             hamburgerList[this.size].price +
             stuffingList[this.stuffing].price +
             totalToppingPrice;
-          // result;
           console.log(`Итоговая стоимость товара: "${totalPrice} р".`);
-          // return this.price;
         }
 
         calculateCalories() {

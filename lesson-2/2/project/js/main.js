@@ -12,9 +12,6 @@ class ProductList {
       { id: 2, title: "Mouse", price: 20, img: "./img/2.jpeg" },
       { id: 3, title: "Keyboard", price: 200, img: "./img/3.jpeg" },
       { id: 4, title: "Gamepad", price: 50, img: "./img/4.jpeg" },
-      { id: 4, title: "Gamepad", price: 50, img: "./img/4.jpeg" },
-      { id: 4, title: "Gamepad", price: 50, img: "./img/4.jpeg" },
-      { id: 4, title: "Gamepad", price: 50, img: "./img/4.jpeg" },
     ];
   }
 
@@ -28,13 +25,21 @@ class ProductList {
   }
 
   getTotalProoductsPrice() {
-    for (let i = 0; i < this.goods.length; i++) {
-      this.totalProductPrice += this.goods[i].price;
-    }
-    return this.totalProductPrice;
-    // console.log(
-    //   `Суммарная стоимость всех товаров равна ${this.totalProductPrice}`
-    // );
+    // for (let i = 0; i < this.goods.length; i++) {
+    //   this.totalProductPrice += this.goods[i].price;
+    // }
+
+    // for (let goodEl of this.goods) {
+    //   this.totalProductPrice += goodEl.price;
+    // }
+    // return this.totalProductPrice;
+
+    // this.goods.forEach((el) => {
+    //   this.totalProductPrice += el.price;
+    // });
+    // return this.totalProductPrice;
+
+    console.log(this.goods.reduce((s, el) => s + el.price, 0));
   }
 }
 
@@ -45,6 +50,7 @@ class ProductItem {
     this.price = product.price;
     this.img = product.img;
   }
+
   render() {
     return `<div class="product-item">
                 <img src=${this.img}>
@@ -59,16 +65,15 @@ class CartList {
   constructor(container = ".cart") {
     this.container = container;
     this.goodsInCart = [];
+    this.renderCart();
   }
 
   renderCart() {
-    this.container.insertAdjacentHTML("beforeend", `<ul class"cartList"></ul>`);
+    const cartBlock = document.querySelector(this.container);
+    cartBlock.insertAdjacentHTML("beforeend", `<ul class"cartList"></ul>`);
   }
 
-  addItemToCartList(cartItem) {
-    this.cartItem = cartItem;
-    this.count = 0;
-  }
+  addItemToCartList(cartItem) {}
 
   renderProductsIncart() {}
 
@@ -87,10 +92,10 @@ class CartItem extends ProductItem {
     this.count = 0;
   }
 
-  createCartItem() {
-    const cartItem = new CartItem(product);
-    return cartItem;
-  }
+  // createCartItem() {
+  //   const cartItem = new CartItem(product);
+  //   return cartItem;
+  // }
 
   render() {
     return `<li class="cart__item">
