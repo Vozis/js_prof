@@ -1,15 +1,30 @@
 const API =
   "https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses";
 
-// ==========================================
+//============================================================================
+
 class ProductList {
-  constructor(container = ".products") {
+  constructor(cart, container = ".products") {
     this.container = container;
+    this.cart = cart;
     this.goods = [];
+    this.allProducts = [];
+    this._initProducts();
     this.getProducts().then((data) => {
       this.goods = data;
       this.render();
     });
+  }
+
+  _initProducts() {
+    document
+      .querySelector(this.container)
+      .addEventListener("click", (event) => {
+        if (event.target.classList.contains("buy-btn")) {
+          console.log(event.target);
+          this.cart.addProduct(event.target);
+        }
+      });
   }
 
   getProducts() {
@@ -24,6 +39,7 @@ class ProductList {
     const block = document.querySelector(this.container);
     for (let product of this.goods) {
       const item = new ProductItem(product);
+      this.allProducts.push(item);
       block.insertAdjacentHTML("beforeend", item.render());
       // block.innerHTML += item.render();
     }
@@ -64,7 +80,7 @@ class ProductItem {
             <div class="desc">
               <h3>${this.title}</h3>
               <p>${this.price} $</p>
-              <button class="buy-btn">Купить</button>
+              <button class="buy-btn" data-id="${this.id}">Купить</button>
             </div>
           </div>`;
   }
@@ -73,12 +89,27 @@ class ProductItem {
 class CartList {
   constructor(container = ".cart") {
     this.container = container;
-    this.goodsInCart = [];
+    this.goodsInCart = []; // массив товаров
+    this.allProducts = [];
+    this._initCart();
     this.getCartGoods().then((data) => {
       this.goodsInCart = data.contents;
-      console.log(this.goodsInCart);
+      // console.log(this.goodsInCart);
       this.render();
     });
+  }
+
+  _initCart() {
+    document.querySelector(".btn-cart").addEventListener("click", () => {
+      document.querySelector(this.container).classList.toggle("hidden");
+    });
+    document
+      .querySelector(this.container)
+      .addEventListener("click", (event) => {
+        if (event.target.classList.contains("remove-btn")) {
+          this.removeProduct(event.target);
+        }
+      });
   }
 
   getCartGoods() {
@@ -91,76 +122,84 @@ class CartList {
 
   render() {
     const block = document.querySelector(this.container);
-    block.insertAdjacentHTML("beforeend", `<ul class="cartList"></ul>`);
-    const cartListEl = document.querySelector(".cartList");
     // console.log(cartListEl);
     for (let product of this.goodsInCart) {
       const item = new CartItem(product);
-      cartListEl.insertAdjacentHTML("beforeend", item.render());
+      this.allProducts.push(item);
+      block.insertAdjacentHTML("beforeend", item.render());
     }
   }
 
-  addItemToCartList(goodProduct) {
-    for (let product of list.goods) {
-      if (product.id_product == goodProduct.dataset.id) {
-        const newGood = new CartItem(product);
-        this.goodsInCart.push(newGood);
-        this.goodsInCart.render();
-      }
+  addProduct(product) {
+    let productId = +product.dataset.id;
+    let findEl = this.allProducts.find((product) => product.id === productId);
+    if (findEl) {
+      findEl.quantity++;
+      this.updateCart(findEl);
+    } else {
+      let element = {
+        id: productId,
+        price: +product.dataset.price,
+        title: product.dataset.name,
+        quantity: 1,
+      };
+      this.goods = [element];
+      this.render();
     }
-
-    // const newGood = new CartItem(
-    //   (list.goods.id_product = `${goodProduct.dataset.id}`)
-    // );
-    // console.log(newGood);
-    // this.goodsInCart.push(newGood);
   }
 
-  renderProductsIncart() {}
-
-  renderNewProductsInCart() {}
-
-  removeProductFromCart(removeProduct) {
-    console.log(this.goodsInCart.indexOf(removeProduct));
-    this.goodsInCart.splice(this.goodsInCart.indexOf(removeProduct), 1);
+  removeProduct(product) {
+    let productId = +product.dataset.id;
+    let findEl = this.allProducts.find((product) => product.id === productId);
+    if (findEl.quantity > 1) {
+      findEl.quantity--;
+      this.updateCart(findEl);
+    } else {
+      this.allProducts.splice(this.allProducts.indexOf(findEl), 1);
+      document.querySelector(`.cart__item[data-id="${productId}"]`).remove();
+    }
   }
 
-  getTotalCartCount() {}
+  // const newGood = new CartItem(
+  //   (list.goods.id_product = `${goodProduct.dataset.id}`)
+  // );
+  // console.log(newGood);
+  // this.goodsInCart.push(newGood);
 
-  getTotalCartPrice() {}
+  updateCart(product) {
+    let block = document.querySelector(`.cart__item[data-id="${product.id}"]`);
+    block.querySelector(
+      ".cart__quantity"
+    ).textContent = `Quantity: ${product.quantity}`;
+    block.querySelector(".cart__total-price").textContent = `${
+      product.quantity * product.price
+    }`;
+  }
 }
 
 //==========================================
 
 class CartItem extends ProductItem {
+  constructor(product, img = "https://via.placeholder.com/200x150") {
+    super(product, img);
+    this.quantity = product.quantity;
+  }
+
   render() {
-    return `<li class="cartList__item" data-id="${this.id}">
-              <h3>${this.title}</h3>
-              <p>${this.price}</p>
-              <button class="remove-btn">Удалить</button>
-            </li>`;
+    return `<div class="cart__item" data-id="${this.id}">
+    <img class="cart__img" src="${this.img}" alt="Some img">
+    <div class="cart__info">
+    <h3 class="cart__title">${this.title}</h3>
+    <p class="cart__price">${this.price}</p>
+    <p class="cart__quantity">Quantity: ${this.quantity}</p>
+    </div>
+    <div class=cart__sum>
+    <p class="cart__total-price">${this.quantity * this.price}</p>
+    <button class="remove-btn" data-id="${this.id}">Удалить</button>
+    </div>
+  </div>`;
   }
 }
 
-let list = new ProductList();
-
-// list.getTotalProoductsPrice();
-
 const cart = new CartList();
-
-document.querySelector(".products").addEventListener("click", (event) => {
-  if (!event.target.classList.contains("buy-btn")) {
-    return;
-  }
-  const goodProduct = event.target.closest(".product-item");
-  console.log(goodProduct);
-  cart.addItemToCartList(goodProduct);
-});
-
-document.querySelector(".cart").addEventListener("click", (event) => {
-  if (!event.target.classList.contains("remove-btn")) {
-    return;
-  }
-  const removeProduct = event.target.closest(".cartList__item");
-  cart.removeProductFromCart(removeProduct);
-});
+let list = new ProductList(cart);
