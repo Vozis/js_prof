@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задание 1, 2</title>
+  </head>
+  <body>
+    <h3>До изменений</h3>
+    <pre>
+      One: 'Hi Mary.'
+      Two: 'Oh, hi.'
+      One: 'How are you doing?'
+      Two: 'I'm doing alright. How about you?'
+      One: 'Not too bad. The weather is great isn't it?'
+      Two: 'Yes. It's absolutely beautiful today.'
+      One: 'I wish it was like this more frequently.'
+      Two: 'Me too.'
+      One: 'So where are you going now?'
+      Two: 'I'm going to meet a friend of mine at the department store.'
+      One: 'Going to do a little shopping?'
+      Two: 'Yeah, I have to buy some presents for my parents.'
+      One: 'What's the occasion?'
+      Two: 'It's their anniversary.'
+      One: 'That's great. Well, you better get going. You don't want to be late.'
+      Two: 'I'll see you next time.'
+      One: 'Sure. Bye.'
+    </pre>
+
+    <h3>После изменений</h3>
+
+    <script>
+      const textToCheck = document.querySelector("pre").textContent;
+      console.log(typeof textToCheck);
+      // const rool = new RegExp("\\s'" && "'$", "gm");
+      // const checkedText = textToCheck.replace(rool, '"');
+
+      // изучал глубже по учебнику learn.javascript, нашел информацию
+      // по ретроспективным проверкам, подошло )
+      const checkedText = textToCheck.replace(/(?<=\s)'|'$/gm, '"');
+      document
+        .querySelector("h3:last-of-type")
+        .insertAdjacentHTML("afterend", `<pre>${checkedText}</pre>`);
+
+      // const result = checkedText.replace(/'$/gm, '"');
+      // document
+      //   .querySelector("h3:last-of-type")
+      //   .insertAdjacentHTML("afterend", `<pre>${result}</pre>`);
+
+      //============================================================================
+
+      // let regexp = /#[0-9a-fA-F]{6}\b/g;
+
+      // let str =
+      //   "color:#121212; background-color:#AA00ef bad-colors:f#fddee #fd2 #12345678";
+
+      // alert(str.matc
+
+      //============================================================================
+
+      //       let regexp = /<!--.*?-->/gs;
+
+      //       let str = `... <!-- My -- comment
+      //  test --> ..  <!----> ..
+      // `;
+      //       alert(str.match(regexp)); // '<!-- My -- comment \n test -->', '<!---->'
+
+      //============================================================================
+
+      // let regexp = /<[^>].+>/g;
+
+      // let str = '<> <a href="/"> <input type="radio" checked> <b>';
+
+      // alert(str.match(regexp)); // '<a href="/">', '<input type="radio" checked>', '<b>'
+
+      //============================================================================
+
+      // let regexp = /^[0-9a-f]{2}(:[0-9a-f]{2}){5}$/gi;
+
+      // alert(regexp.test("01:32:54:67:89:AB")); // true
+
+      // alert(regexp.test("0132546789AB")); // false (нет двоеточий)
+
+      // alert(regexp.test("01:32:54:67:89")); // false (5 чисел, должно быть 6)
+
+      // alert(regexp.test("01:32:54:67:89:ZZ")); // false (ZZ в конце строки)
+
+      //============================================================================
+
+      // let regexp = /#([0-9a-f]{3}\b|[0-9a-f]{6}\b)/gi;
+      // regexp = /#([0-9a-f]{3}){1,2}\b/gi;
+
+      // let str = "color: #3f3; background-color: #AA00ef; and: #abcd";
+
+      // alert(str.match(regexp)); // #3f3 #AA00ef
+
+      //============================================================================
+
+      // let regexp = /(-?\d{1,}(\.\d+)?)/g;
+
+      // let str = "-1.5 0 2 -123.4.";
+
+      // alert(str.match(regexp)); // -1.5, 0, 2, -123.4
+
+      //============================================================================
+
+      // function parse(expr) {
+      //   const regexp =
+      //     /(?<a>-?\d+(?:\.\d+)?)\s*(?<op>[-+*/])\s*(?<b>-?\d+(?:\.\d+)?)/;
+      //   // /(-?\d+(?:\.\d+)?)\s*([-+*\/])\s*(-?\d+(?:\.\d+)?)/;
+
+      //   let result = expr.match(regexp);
+
+      //   if (!result) return [];
+      //   result.shift();
+
+      //   return result;
+      // }
+
+      // let [a, op, b] = parse("1.2 * 3.4");
+
+      // alert(a); // 1.2
+      // alert(op); // *
+      // alert(b); // 3.4
+
+      //============================================================================
+
+      // let regexp = /Java(Script)?|C(\+\+)?|PHP/gi;
+
+      // alert("Java JavaScript PHP C++ C".match(regexp)); // Java JavaScript PHP C++ C
+
+      //============================================================================
+
+      // let regexp = /\[(b|url|quote)].*?\[\/\1]/gs;
+
+      // let str = "..[url]http://ya.ru[/url]..";
+      // alert(str.match(regexp)); // [url]http://ya.ru[/url]
+
+      //============================================================================
+
+      // let regexp = /"(\\.|[^"\\])*"/g;
+
+      // let str = ' .. "test me" .. "Скажи \\"Привет\\"!" .. "\\\\ \\"" .. ';
+
+      // // эта строка в памяти:
+      // console.log(str); //  .. "test me" .. "Скажи \"Привет\"!" .. "\\ \"" ..
+
+      // alert(str.match(regexp));
+
+      //============================================================================
+
+      // let regexp = /<style(\s.*?)?>/g;
+      // regexp = /<style(>|(\s.*?>))/g;
+
+      // alert('<style> <styler> <style test="...">'.match(regexp)); // <style>, <style test="...">
+
+      //============================================================================
+
+      // let str = "1 индейка стоит 30€";
+      // let regexp = /\d+(?=(€))/; // добавлены дополнительные скобки вокруг €|kr
+
+      // alert(str.match(regexp)); // 30, €
+
+      //============================================================================
+      // let regexp = /(?<![-\d])\d+/g;
+
+      // let str = "0 12 -5 123 -18";
+
+      // alert(str.match(regexp)); // 0, 12, 123
+
+      //============================================================================
+
+      // let regexp = /(?<=<div.*?>)/;
+
+      // let str = `
+      //     <div style="height: 200px">
+      //       ...
+      //     </div>
+      // `;
+
+      // str = str.replace(regexp, `<h1>Hello</h1>`);
+
+      //============================================================================
+    </script>
+  </body>
+</html>

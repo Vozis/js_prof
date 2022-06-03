@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>lesson-4</title>
+  </head>
+  <body>
+    <script>
+      // Синтаксис № 1
+      // let regExp = new RegExp("рег. выражение", "флаги"); // флаги - доп. настройки
+      // Синтаксис № 2
+      // let regExp = /рег. выражение/ флаги
+
+      let str = "Язык Javascript называется из-за популярности языка Java";
+      // // let rool = new RegExp("java", "i");
+      // let rool = /java/i;
+      // let result = rool.test(str);
+      // console.log(result);
+
+      console.log(str.search(/java/i));
+
+      console.log(str.match(/java/gi));
+
+      console.log("+7(999)999-99-99".replace("-", ":"));
+      console.log("+7(988)999-88-88".replace(/-/g, ":"));
+
+      console.log("Язык JavaScript".match(/\bjava/i));
+
+      console.log("+7(999)999-99-99".match(/\d/g).join(""));
+
+      // Проверка на email
+      // разбить email на 3 части: до собаки, после собаки и после точки
+
+      console.log(
+        "test@mail.ru".match(/^[a-z0-9\._-]+@[a-z0-9\._-]+\.[a-z]{2,4}$/)
+      );
+    </script>
+  </body>
+</html>
