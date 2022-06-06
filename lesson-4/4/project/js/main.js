@@ -59,11 +59,11 @@ class List {
   filter(value) {
     const regexp = new RegExp(value, "i");
     this.filtered = this.allProducts.filter((product) =>
-      regexp.test(product.product_name)
+      regexp.test(product.product_name),
     );
     this.allProducts.forEach((el) => {
       const block = document.querySelector(
-        `.product-item[data-id="${el.id_product}"]`
+        `.product-item[data-id="${el.id_product}"]`,
       );
       if (!this.filtered.includes(el)) {
         block.classList.add("invisible");
@@ -132,7 +132,7 @@ class Cart extends List {
       if (data.result === 1) {
         let productId = +element.dataset["id"];
         let find = this.allProducts.find(
-          (product) => product.id_product === productId
+          (product) => product.id_product === productId,
         );
         if (find) {
           find.quantity++;
@@ -157,7 +157,7 @@ class Cart extends List {
       if (data.result === 1) {
         let productId = +element.dataset["id"];
         let find = this.allProducts.find(
-          (product) => product.id_product === productId
+          (product) => product.id_product === productId,
         );
         if (find.quantity > 1) {
           find.quantity--;
@@ -173,10 +173,10 @@ class Cart extends List {
   }
   _updateCart(product) {
     let block = document.querySelector(
-      `.cart-item[data-id="${product.id_product}"]`
+      `.cart-item[data-id="${product.id_product}"]`,
     );
     block.querySelector(
-      ".product-quantity"
+      ".product-quantity",
     ).textContent = `Quantity: ${product.quantity}`;
     block.querySelector(".product-price").textContent = `$${
       product.quantity * product.price

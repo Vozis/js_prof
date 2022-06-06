@@ -15,6 +15,7 @@ class List {
     this.url = url;
     this.goods = []; // товары из json
     this.allProducts = []; // массив объектов соответсвующего класса
+    this.filtered = []; // отфильтрованные товары
     this._init();
   }
 
@@ -42,9 +43,27 @@ class List {
     for (let product of this.goods) {
       const productEl = new this.list[this.constructor.name](product);
       this.allProducts.push(productEl);
+
       block.insertAdjacentHTML("beforeend", productEl.render());
       // block.innerHTML += item.render();
     }
+  }
+
+  filter(value) {
+    const regexp = new RegExp(value, "i");
+    this.filtered = this.allProducts.filter((product) =>
+      regexp.test(product.title)
+    );
+
+    this.allProducts.forEach((el) => {
+      const block = document.querySelector(`.product-item[data-id="${el.id}"]`);
+      console.log(block);
+      if (!this.filtered.includes(el)) {
+        block.classList.add("hidden");
+      } else {
+        block.classList.remove("hidden");
+      }
+    });
   }
 
   _init() {
@@ -93,6 +112,12 @@ class ProductsList extends List {
           console.log(event.target);
           this.cart.addProduct(event.target);
         }
+      });
+    document
+      .querySelector(".search-form")
+      .addEventListener("submit", (event) => {
+        event.preventDefault();
+        this.filter(document.querySelector(".search-field").value);
       });
   }
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      input {
+        width: 200px;
+        padding: 5px 10px;
+        margin: 10px 0;
+      }
+      input:focus {
+        outline: none;
+      }
+      button {
+        border: none;
+        background: rebeccapurple;
+        color: white;
+        padding: 10px 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+        border-radius: 5px;
+      }
+      .error-msg {
+        color: red;
+        margin: 10px 0;
+      }
+      .invalid {
+        border: 2px solid red;
+      }
+      .valid {
+        border: 2px solid green;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="form" action="#" id="myform">
+      <label>
+        Имя
+        <input class="form__input" name="name" id="name" type="text" />
+      </label>
+      <br />
+      <label>
+        Телефон
+        <input class="form__input" name="phone" id="phone" type="text" />
+      </label>
+      <br />
+      <label>
+        E-mail
+        <input class="form__input" name="email" id="email" type="text" />
+      </label>
+      <br />
+
+      <button class="btn" type="submit">Отправить</button>
+    </form>
+
+    <script src="validator.js"></script>
+    <script>
+      window.addEventListener("load", () => {
+        document.querySelector(".form").addEventListener("submit", (e) => {
+          let valid = new Validator("myform");
+          if (!valid.valid) {
+            e.preventDefault();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

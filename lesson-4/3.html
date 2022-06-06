@@ -48,20 +48,19 @@
     </style>
   </head>
   <body>
-    <form class="form" action="#">
+    <form class="form" action="#" id="myform">
       <label>
         <span>Имя</span>
-        <input class="form__input" data-type="name" type="text" />
+        <input class="form__input" name="name" id="nameEl" type="text" />
       </label>
       <label>
         <span>Телефон</span>
-        <input class="form__input" data-type="phone" type="text" />
+        <input class="form__input" name="phone" id="phone" type="text" />
       </label>
       <label>
         <span>E-mail</span>
-        <input class="form__input" data-type="email" type="text" />
+        <input class="form__input" name="email" id="email" type="text" />
       </label>
-      <textarea class="form__input" data-type="text"> </textarea>
       <button class="btn" type="submit">Отправить</button>
     </form>
 
@@ -214,7 +213,7 @@
         }
 
         checkPhone(el) {
-          /^\+7\(\d{3}\)\d{3}\-\d{4}$/i.test(el.value)
+          /^\+7\(\d{3}\)\d{3}\-\d{4}$/.test(el.value)
             ? el.classList.add("ok")
             : el.classList.add("alert");
         }
