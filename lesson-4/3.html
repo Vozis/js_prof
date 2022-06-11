@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Задание 3</title>
+
+    <style>
+      body {
+        min-height: 100vh;
+        color: black;
+      }
+
+      .form,
+      .form-2 {
+        padding-top: 200px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        max-width: 550px;
+        gap: 20px;
+      }
+
+      label {
+        display: flex;
+        gap: 20px;
+      }
+
+      label span {
+        min-width: 70px;
+      }
+
+      label input {
+        flex: 1 1 auto;
+      }
+
+      textarea {
+      }
+
+      .alert {
+        outline: 2px solid red;
+      }
+
+      .ok {
+        outline: 2px solid green;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="form" action="#" id="myform">
+      <label>
+        <span>Имя</span>
+        <input class="form__input" name="name" id="nameEl" type="text" />
+      </label>
+      <label>
+        <span>Телефон</span>
+        <input class="form__input" name="phone" id="phone" type="text" />
+      </label>
+      <label>
+        <span>E-mail</span>
+        <input class="form__input" name="email" id="email" type="text" />
+      </label>
+      <button class="btn" type="submit">Отправить</button>
+    </form>
+
+    <form class="form-2" action="#">
+      <label>
+        <span>Имя</span>
+        <input class="form-2__input" data-type="name-2" type="text" />
+      </label>
+      <label>
+        <span>Телефон</span>
+        <input class="form-2__input" data-type="phone-2" type="text" />
+      </label>
+      <label>
+        <span>E-mail</span>
+        <input class="form-2__input" data-type="email-2" type="text" />
+      </label>
+      <textarea class="form-2__input" data-type="text-2"> </textarea>
+      <button class="btn-2" type="submit">Отправить</button>
+    </form>
+    <script>
+      const formEl = document.querySelector("form");
+      const nameEl = document.querySelector("[data-type='name']");
+      const phoneEl = document.querySelector("[data-type='phone']");
+      const emailEl = document.querySelector("[data-type='email']");
+      const textareaEl = document.querySelector("[data-type='text']");
+      const formInputEls = document.querySelectorAll("input, textarea");
+
+      const errorMessageEl = document.createElement("span");
+      errorMessageEl.textContent = "Ошибка в данных";
+
+      formEl.addEventListener("submit", (event) => {
+        if (errorMessageEl) {
+          errorMessageEl.remove();
+        }
+        formInputEls.forEach((formInputEl) => {
+          if (formInputEl.value === "") {
+            event.preventDefault();
+            formInputEl.classList.add("alert");
+            formInputEl.after(errorMessageEl);
+          }
+        });
+      });
+
+      formEl.addEventListener("input", (event) => {
+        if (!event.target.classList.contains("form__input")) {
+          return;
+        }
+        const el = event.target;
+
+        switch (el.dataset.type) {
+          case "name":
+            el.classList.remove("ok");
+            checkName(el);
+            break;
+
+          case "phone":
+            el.classList.remove("ok");
+            checkPhone(el);
+            break;
+          case "email":
+            el.classList.remove("ok");
+            checkEmail(el);
+            break;
+          case "text":
+            el.classList.remove("ok");
+            checkText(el);
+        }
+      });
+
+      function checkName(el) {
+        /^[a-zA-zа-яА-ЯёË]{2,}$/i.test(el.value)
+          ? el.classList.add("ok")
+          : el.classList.add("alert");
+      }
+
+      function checkPhone(el) {
+        /^\+7\(\d{3}\)\d{3}\-\d{4}$/i.test(el.value)
+          ? el.classList.add("ok")
+          : el.classList.add("alert");
+      }
+
+      function checkEmail(el) {
+        /^[a-zа-я0-9._-]+@[a-z0-9-_]+\.[a-z0-9-_]{2,4}$/iu.test(el.value)
+          ? el.classList.add("ok")
+          : el.classList.add("alert");
+      }
+
+      function checkText(el) {
+        /^.+$/i.test(el.value)
+          ? el.classList.add("ok")
+          : el.classList.add("alert");
+      }
+
+      //============================================================================
+
+      class Form {
+        constructor(container = document.querySelector(".form-2")) {
+          this.container = container;
+          console.log(this.container);
+          this.checkInputs();
+          this.checkSubmit();
+        }
+
+        checkSubmit() {
+          this.container.addEventListener("submit", (event) => {
+            if (errorMessageEl) {
+              errorMessageEl.remove();
+            }
+
+            this.container
+              .querySelectorAll(".form-2__input")
+              .forEach((formInputEl) => {
+                if (formInputEl.value === "") {
+                  event.preventDefault();
+                  formInputEl.classList.add("alert");
+                  formInputEl.after(errorMessageEl);
+                }
+              });
+          });
+        }
+
+        checkInputs() {
+          this.container.addEventListener("input", (event) => {
+            if (!event.target.classList.contains("form-2__input")) {
+              return;
+            }
+
+            let el = event.target;
+            switch (el.dataset.type) {
+              case "phone-2":
+                el.classList.remove("ok");
+                this.checkPhone(el);
+                break;
+              case "name-2":
+                el.classList.remove("ok");
+                this.checkName(el);
+                break;
+              case "email-2":
+                el.classList.remove("ok");
+                this.checkEmail(el);
+                break;
+            }
+          });
+        }
+
+        checkName(el) {
+          /^[a-zA-zа-яА-ЯёË]{2,}$/i.test(el.value)
+            ? el.classList.add("ok")
+            : el.classList.add("alert");
+        }
+
+        checkPhone(el) {
+          /^\+7\(\d{3}\)\d{3}\-\d{4}$/.test(el.value)
+            ? el.classList.add("ok")
+            : el.classList.add("alert");
+        }
+
+        checkEmail(el) {
+          /^[a-zа-я0-9._-]+@[a-z0-9-_]+\.[a-z0-9-_]{2,4}$/iu.test(el.value)
+            ? el.classList.add("ok")
+            : el.classList.add("alert");
+        }
+      }
+
+      const form = new Form();
+    </script>
+  </body>
+</html>

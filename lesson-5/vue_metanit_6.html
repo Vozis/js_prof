@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Слоты Vue 3</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div id="app">
+      <child-comp>
+        <h2>Vue App</h2>
+      </child-comp>
+      <hr />
+      <child-comp> </child-comp>
+
+      <hr />
+      <userslist>
+        <template v-slot:userdetails="props">
+          <div>
+            <p>Имя: {{ props.user.name}}</p>
+            <p>Возраст: {{ props.user.age }}</p>
+          </div>
+        </template>
+      </userslist>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      const app = Vue.createApp({});
+
+      app.component("child-comp", {
+        template: `<div>
+          <slot>Здесь значение по умолчанию</slot>
+          <h3>Child Component</h3> 
+          </div>`,
+      });
+
+      app.component("userslist", {
+        data() {
+          return {
+            users: [
+              { name: "Tom", age: 36 },
+              { name: "Sam", age: 39 },
+              { name: "Bob", age: 25 },
+            ],
+          };
+        },
+        template: `<ul>
+                <li v-for="user in users">
+                    <slot name="userdetails" :user="user"></slot>
+                </li>
+            </ul>`,
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

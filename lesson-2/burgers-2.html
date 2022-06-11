@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const hamburgerList = {
+        small: { price: 50, calories: 20 },
+        big: { price: 100, calories: 40 },
+      };
+
+      const stuffingList = {
+        cheese: { price: 10, calories: 20 },
+        salat: { price: 20, calories: 5 },
+        potato: { price: 15, calories: 10 },
+      };
+
+      const toppingList = {
+        spice: { price: 15, calories: 0 },
+        mayo: { price: 20, calories: 5 },
+      };
+
+      class Param {
+        constructor(element) {
+          // this.name = element.value;
+          this.price = +element.price;
+          this.calories = +element.calories;
+        }
+      }
+
+      class Hamburger {
+        constructor(size, stuffing, topping) {
+          this.size = new Param(this.getSize(size));
+          // this.checkSize();
+          this.stuffing = new Param(this.getStuffing(stuffing));
+          this.toppingEls = new Param(this.getTopping(topping));
+          // this.checkStuffing();
+          this.price = 0;
+          this.calories = 0;
+        }
+
+        getSize(name) {
+          return hamburgerList[name];
+        }
+
+        getStuffing(name) {
+          return stuffingList[name];
+        }
+
+        getTopping(name) {
+          return toppingList[name];
+        }
+
+        // checkSize() {
+        //   for (let key in hamburgerList) {
+        //     if (this.size === key) {
+        //       return;
+        //       // console.error(`Такого размера нет`);
+        //     }
+
+        //     // if (this.size !== key) {
+        //     //   throw new Error(`Такого размера нет`);
+        //     // } else if (this.size === key) {
+        //     //   return;
+        //     // }
+        //   }
+        // }
+
+        // checkStuffing() {
+        //   for (let key in stuffingList) {
+        //     try {
+        //       if (this.stuffing === key) {
+        //         return;
+        //       }
+        //     } catch (e) {
+        //       throw new Error(`Такой начинки нет`);
+        //     }
+        //   }
+        // }
+
+        addTopping(topping) {
+          this.price += toppingList[topping].price;
+          this.calories += toppingList[topping].calories;
+          this.toppingEls.push(topping);
+          console.log(`Дополнительно добавили "${topping}".`);
+        }
+
+        removeTopping(topping) {
+          this.price -= toppingList[topping].price;
+          this.calories -= toppingList[topping].calories;
+          this.toppingEls.pop(topping);
+          console.log(`Удалили добавку "${topping}".`);
+        }
+
+        showTopping(topping) {
+          console.log(
+            `Вы выбрали следующие добавки: "${this.toppingEls.join(", ")}".`
+          );
+        }
+
+        showSize() {
+          console.log(`Выбран размер бургера: "${this.size}".`);
+        }
+
+        showStuffing() {
+          console.log(`Выбрана начинка для бургера: "${this.stuffing}".`);
+        }
+
+        calculatePrice() {
+          let totalToppingPrice = 0;
+          for (let topping of this.toppingEls) {
+            topping = toppingList[topping];
+            totalToppingPrice += topping.price;
+          }
+
+          const totalPrice =
+            hamburgerList[this.size].price +
+            stuffingList[this.stuffing].price +
+            totalToppingPrice;
+          console.log(`Итоговая стоимость товара: "${totalPrice} р".`);
+        }
+
+        calculateCalories() {
+          let totalToppingCalories = 0;
+          for (let calories of this.toppingEls) {
+            calories = toppingList[calories];
+            totalToppingCalories += calories.calories;
+          }
+          const totalCalories =
+            hamburgerList[this.size].price +
+            stuffingList[this.stuffing].price +
+            totalToppingCalories;
+
+          console.log(`Итоговая калорийность: "${totalCalories} кКал".`);
+        }
+      }
+
+      // =======================================
+      const burger1 = new Hamburger("big", "cheese", ["spice", "mayo"]);
+      console.log(burger1);
+      burger1.addTopping("mayo");
+      burger1.addTopping("mayo");
+      burger1.addTopping("spice");
+      burger1.removeTopping("mayo");
+      //   burger1.getSize();
+      //   burger1.getStuffing();
+      burger1.getTopping();
+      burger1.calculatePrice();
+      burger1.calculateCalories();
+      // console.log(burger1.toppingEls);
+      //   console.log(burger1);
+
+      const burger2 = new Hamburger("big", "potato", ["spice"]);
+      console.log(burger2);
+      burger2.calculatePrice();
+      burger2.calculateCalories();
+      //
+    </script>
+  </body>
+</html>

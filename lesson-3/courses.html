@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div></div>
+
+    <script>
+      // fetch() - функция, которая выполнчет звпрос к
+      // серверу и возвращает объект Promise
+      //
+
+      const getCourse = async () => {
+        await fetch("https://www.cbr-xml-daily.ru/daily_json.js")
+          .then((text) => text.json())
+          .then((data) => {
+            courseDollar = data["Valute"]["USD"]["Value"];
+          });
+      };
+
+      const showInfo = async () => {
+        await getCourse();
+        fetch("file.json")
+          .then((text) => text.json())
+          .then((data) => {
+            data.forEach((item) => {
+              document
+                .querySelector("div")
+                .insertAdjacentHTML(
+                  "beforeend",
+                  `Абонент ${item.fio} имеет телефон ${
+                    item.phone
+                  } с балансом ${(item.balance / courseDollar).toFixed(
+                    2
+                  )} $. <hr>`
+                );
+            });
+          });
+      };
+
+      showInfo();
+    </script>
+  </body>
+</html>
