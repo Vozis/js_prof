@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        padding: 50px;
+      }
+
+      .userdetails {
+        border-bottom: 1px solid #888;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue@3"></script>
+
+    <div id="app">
+      {{ message }}
+      <h1>{{header}}</h1>
+      <br />
+      <hr />
+      <br />
+      <hello message="Привет привет"></hello>
+      <hello message="Как жизнь"></hello>
+      <hello message="Как дела"></hello>
+      <input type="text" v-model="welcome" />
+      <comp-a :message="welcome"></comp-a>
+      <comp-a></comp-a>
+
+      <br />
+      <hr />
+      <br />
+      <input type="text" v-model="name" />
+      <input type="number" v-model.number="age" />
+
+      <user :name="name" :age="age"></user>
+
+      <br />
+      <hr />
+      <br />
+
+      <userlist :users="users" ref="list"></userlist>
+      <button v-on:click="toggle()">Скрыть/Показать</button>
+
+      <br />
+      <hr />
+      <br />
+
+      <userdetailing :user="user" ref="details"></userdetailing>
+      <button v-on:click="toggle()">Скрыть/Показать</button>
+
+      <br />
+      <hr />
+      <br />
+      <h2>Hello, {{ surname }}</h2>
+      <useredit :user="surname" v-on:userchange="change"></useredit>
+    </div>
+
+    <script>
+      // const globalData = {
+      //   header: "Заголовок компонента",
+      //   counter: 0,
+      // };
+      const compA = {
+        props: ["message"],
+        template: `
+          <div>
+          <h3>{{ message }}</h3>
+          <button v-on:click="increase">OK</button>
+          <span>{{ counter }}</span>
+          </div>`,
+        data() {
+          return {
+            header: "Заголовок компонента",
+            counter: 0,
+          };
+        },
+
+        methods: {
+          increase() {
+            this.counter++;
+          },
+        },
+      };
+
+      //=================================================================
+
+      const app = Vue.createApp({
+        data() {
+          return {
+            message: "Hello Vue!",
+            header: "Основной заголовок",
+            welcome: "",
+            name: "Bob",
+            age: 18,
+            users: [
+              {
+                name: "Tom",
+                age: 18,
+              },
+              {
+                name: "Bob",
+                age: 23,
+              },
+              {
+                name: "Alice",
+                age: 21,
+              },
+            ],
+            user: {
+              name: "john",
+              age: 35,
+            },
+            surname: "Сизов",
+          };
+        },
+        components: {
+          "comp-a": compA,
+        },
+        methods: {
+          toggle() {
+            this.$refs.list.userlist.visible =
+              !this.$refs.list.userlist.visible;
+          },
+          change(value) {
+            this.surname = value;
+          },
+        },
+      });
+
+      app.component("useredit", {
+        props: ["user"],
+        data() {
+          return {
+            userName: this.user,
+          };
+        },
+        template: `<div>
+            <input type="text" v-model="userName" v-on:input="onUserChange" />
+            <p>Name: {{userName}}</p>
+            </div>`,
+        methods: {
+          onUserChange() {
+            this.$emit("userchange", this.userName);
+          },
+        },
+      });
+
+      app.component("hello", {
+        props: ["message"],
+        data() {
+          return {
+            title: "другие данные",
+          };
+        },
+        template: "<h2>{{message}}</h2>",
+      });
+
+      app.component("user", {
+        props: {
+          name: {
+            type: String,
+            required: true,
+            default: "Tom",
+            validator: function (value) {
+              return /[a-z]{2,}/i.test(value);
+            },
+          },
+          age: {
+            type: Number,
+            required: true,
+            default: 18,
+            validator: function (value) {
+              return value >= 0 && value < 100;
+            },
+          },
+        },
+        template:
+          "<div><h2>User</h2><p>Name: {{name}}</p><p>Age: {{age}}</p></div>",
+      });
+
+      app.component("userdetails", {
+        props: ["user"],
+        template: `<div class="userdetails" >
+                  <p>Name: {{user.name}}</p>
+                  <p>Age: {{user.age}}</p>
+          </div>`,
+      });
+
+      app.component("userlist", {
+        props: ["users"],
+        template: `<div>
+        <userdetails v-for="user in users" :user="user" ref="listage"></userdetails>
+        </div>`,
+        data() {
+          return {
+            visible: false,
+          };
+        },
+      });
+
+      app.component("userdetailing", {
+        props: ["user"],
+        template: `<div>
+                <h2>Информация о пользователе</h2>
+                <div>
+                    <p>Name: {{user.name}}</p>
+                    <p v-if="visible">Age: {{user.age}}</p>
+                </div>
+
+            </div>`,
+        data() {
+          return {
+            visible: false,
+          };
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

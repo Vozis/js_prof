@@ -5,6 +5,7 @@ const app = new Vue({
   el: "#app",
   data: {
     catalogUrl: "/catalogData.json",
+    cartUrl: "/getBasket.json",
     products: [],
     filtered: [],
     cart: [],
@@ -28,31 +29,42 @@ const app = new Vue({
     },
 
     addProduct(product) {
-      let find = this.cart.find(
-        (item) => product.id_product === item.id_product,
-      );
-      if (find) {
-        find.quantity++;
-      } else {
-        // let itemCart = Object.assign(product, { quantity: 1 });
-        this.$set(product, "quantity", 1);
-        this.cart.push(product);
-        //  console.log(this.cart);
-      }
+      this.getJson(`${API}/addToBasket.json`).then((data) => {
+        if (data.result === 1) {
+          let find = this.cart.find(
+            (item) => product.id_product === item.id_product,
+          );
+          if (find) {
+            find.quantity++;
+          } else {
+            // let itemCart = Object.assign(product, { quantity: 1 });
+            this.$set(product, "quantity", 1);
+            this.cart.push(product);
+            //  console.log(this.cart);
+          }
+        }
+      });
     },
 
     removeProduct(product) {
-      let find = this.cart.find(
-        (item) => product.id_product === item.id_product,
-      );
-      if (find.quantity > 1) {
-        find.quantity--;
-      } else {
-        this.cart.splice(this.cart.indexOf(find), 1);
-      }
+      this.getJson(`${API}/addToBasket.json`).then((data) => {
+        if (data.result === 1) {
+          if (product.quantity > 1) {
+            product.quantity--;
+          } else {
+            this.cart.splice(this.cart.indexOf(product), 1);
+          }
+        }
+      });
     },
   },
   mounted() {
+    this.getJson(`${API + this.cartUrl}`) // 2 товара из удаленного хранилища
+      .then((data) => {
+        for (let el of data.contents) {
+          this.cart.push(el);
+        }
+      });
     this.getJson(`${API + this.catalogUrl}`) // 2 товара из удаленного хранилища
       .then((data) => {
         for (let el of data) {
