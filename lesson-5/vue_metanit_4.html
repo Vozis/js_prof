@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Компоненты Vue 3</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div id="app">
+      <h2>Hello, {{name}}</h2>
+      <useredit :user="name" v-on:userchange="change"></useredit>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            name: "Tom",
+          };
+        },
+        methods: {
+          change(value) {
+            this.name = value;
+          },
+        },
+      });
+
+      app.component("useredit", {
+        props: ["user"],
+        data() {
+          return { userName: this.user };
+        },
+        template:
+          '<div><input type="text" v-model="userName" v-on:input="onUserChange" /><p>Name: {{userName}}</p></div>',
+        methods: {
+          onUserChange() {
+            this.$emit("userchange", this.userName);
+          },
+        },
+      });
+      app.mount("#app");
+    </script>
+  </body>
+</html>

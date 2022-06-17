@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Компоненты Vue 3</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div id="app">
+      <h2>Список пользователей</h2>
+      <userform :users="users"></userform>
+      <div>
+        <useritem
+          v-for="(user, index) in users"
+          :user="user"
+          :index="index"
+          v-on:userdelete="remove"
+        >
+        </useritem>
+      </div>
+    </div>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            users: [
+              { name: "Tom", age: 23 },
+              { name: "Bob", age: 26 },
+              { name: "Alice", age: 28 },
+            ],
+          };
+        },
+
+        methods: {
+          remove(index) {
+            this.users.splice(index, 1);
+          },
+        },
+      });
+
+      app.component("userform", {
+        props: ["users"],
+        data() {
+          return {
+            user: { name: "", age: 18 },
+          };
+        },
+        template: `<div>
+                    <input type="text" v-model="user.name" />
+                    <input type="number" v-model="user.age" />
+                    <button  v-on:click="userAdd">Add</button>
+                </div>`,
+        methods: {
+          userAdd(event) {
+            this.users.push({ name: this.user.name, age: this.user.age });
+          },
+        },
+      });
+
+      app.component("useritem", {
+        props: ["user", "index"],
+        template: `<div>
+                    <p>Name: {{user.name}} <br> Age: {{user.age}}</p>
+                    <button  v-on:click="userDelete(index)">Delete</button>
+                </div>`,
+        methods: {
+          userDelete(index) {
+            this.$emit("userdelete", index);
+          },
+        },
+      });
+
+      app.mount("#app");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,103 @@
+<meta charset="UTF-8">
+<script>
+
+    /*
+    Существует два вида методов
+    1) Методы объекта
+    2) Статические методы или методы класса
+     */
+
+    class Motivation{
+        /**
+         *
+         * @param person - сотрудник у которого будет либо премия, либо взыскание
+         * @param rate - если процент больше нуля, то это премия, а если меньше, то взыскание
+         */
+        changeSalary(person,rate){
+            let motivationMoney = person.salary * rate / 100;//сумма либо премии, либо взыскания
+            console.log(rate > 0 ? `${person.fio} получает премию ${motivationMoney}` :
+                `${person.fio} получает взыскание в размере ${motivationMoney}`);
+            person.salary += motivationMoney;
+
+        }
+    }
+
+
+    class Person{
+       constructor(id,fio,salary) {
+           this.id = id;
+           this.fio = fio;
+           this.salary = salary;
+       }
+       #getInfo(){
+           return `Сотрудник ${this.fio} зарабатывает ${this.salary}`;
+       }
+
+        /**
+         * Метод возвращает сотрудника с максимальным окладом
+         * @param men - массив сотрудников
+         */
+       static getManWithMaxSalary(men){
+            let manMaxSalary = men[0];
+            for(let i = 1;i < men.length;i++){
+                if(manMaxSalary.salary < men[i].salary){
+                    manMaxSalary = men[i];
+                }
+            }
+            return manMaxSalary;
+       }
+        static getManWithMinSalary(men){
+            let manMinSalary = men[0];
+            for(let i = 1;i < men.length;i++){
+                if(manMinSalary.salary > men[i].salary){
+                    manMinSalary = men[i];
+                }
+            }
+            return manMinSalary;
+        }
+    }
+
+    /*
+    Если базовый класс содержит конструктор с параметрами, то в потомке базового класса тоже делаем
+    конструктор с параметрами и в нем вызываем базовый конструктор с помощью super()
+     */
+    class Manager extends Person{
+        constructor(id,fio,salary,role) {
+            super(id,fio,salary);
+            this.role = role;
+        }
+        getInfo(){
+            return `${super.getInfo()}\nРоль сотрудника ${this.fio}: ${this.role}`;
+        }
+    }
+
+    const manager = new Manager(1,"Иванов",500000,"Владелец");
+    console.log(manager.getInfo());
+
+    // const man1 = new Person(1,"Иванов",50000);//при создании объекта всегда вызывается конструктор класса
+    // const man2 = new Person(2,"Петров",80000);
+    // const man3 = new Person(3,"Сидоров",70000);
+    //
+    // let office = [man1,man2,man3];
+    // console.log('Информация о сотрудниках до модификации');
+    // office.forEach(man=>console.log(man.getInfo()));
+    // let manMax = Person.getManWithMaxSalary(office);
+    // let manMin = Person.getManWithMinSalary(office);
+    // console.log(`Сотрудник ${manMax.fio} имеет максимальный оклад ${manMax.salary}`);
+    // console.log(`Сотрудник ${manMin.fio} имеет минимальный оклад ${manMin.salary}`);
+    // console.log("\n");
+    //
+    // const motivation = new Motivation();
+    // office.forEach(man=>{
+    //     if(man.id == manMax.id){
+    //         motivation.changeSalary(man,-20);
+    //     }
+    //     if(man.id == manMin.id){
+    //         motivation.changeSalary(man,20);
+    //     }
+    // });
+    // console.log('Информация о сотрудниках с учетом их работы в данном месяце');
+    // office.forEach(man=>console.log(man.getInfo()));
+
+
+</script>

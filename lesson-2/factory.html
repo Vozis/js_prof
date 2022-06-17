@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Factory</title>
+  </head>
+  <body>
+    <script>
+      class Car {
+        constructor(title, price) {
+          this.title = title;
+          this.price = price;
+        }
+      }
+
+      class Factory {
+        constructor(titleFactory) {
+          this.titleFactory = titleFactory;
+        }
+
+        createCar(titleCar) {
+          console.log(`Началась сборка авто ${titleCar}`);
+          const car = new Car(titleCar, parseInt(Math.random() * 4000 + 1000));
+          return car;
+        }
+      }
+
+      class Diller {
+        constructor(title, years) {
+          this.title = title;
+          this.years = years;
+        }
+
+        /*
+        coint - количество авто
+        models - массив моделей
+        factory - объект завод
+        */
+        createOrder(count, models, factory) {
+          const order = new Order(count, models, factory, this);
+        }
+      }
+
+      class Order {
+        constructor(count, models, factory, diller) {
+          this.count = count;
+          this.models = models;
+          this.factory = factory;
+          this.diller = diller;
+          this.sumOrder = 0;
+          this.cars = [];
+          this.start(); // запустить процесс создания заказ
+          this.showInfo();
+        }
+
+        start() {
+          for (let i = 0; i < count; i++) {
+            let car = this.factory.createCar(this.models, [
+              parseInt(Math.random() * this.models.length),
+            ]);
+            this.cars.push(car);
+            this.sumOrder += car.price;
+          }
+        }
+
+        showInfo() {
+          this.cars.forEach((car) => {
+            console.log(`${car.title} стоит ${car.price}`);
+          });
+          console.log(`Общая стоимость заказа ${this.sumOrder}`);
+        }
+      }
+
+      let models = ["Гранта", "Нива", "Веста"];
+      let count = parseInt(Math.random() * 20 + 10);
+      let factory = new Factory("Автоваз");
+      let diller = new Diller("Элвис", 20);
+      diller.createOrder(count, models, factory);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const hello = async () => {
+        return "Добро пожаловать";
+      };
+
+      // hello().then((text) => console.log(text));
+
+      const sayHello = async () => {
+        let message = await hello();
+        console.log(message);
+      };
+
+      sayHello();
+    </script>
+  </body>
+</html>

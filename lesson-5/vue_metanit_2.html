@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Познание Vue 3 по Metanit, Глава 2</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"
+    />
+
+    <style>
+      body {
+        padding: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue@3"></script>
+
+    <div id="app" class="col-md-4">
+      <p>{{ message }}</p>
+      <br />
+      <hr />
+      <br />
+      <p v-if="visible">Параграф 1</p>
+      <p v-else>Парагараф 2</p>
+      <button v-on:click="visible=!visible">
+        {{visible ? 'Скрыть' : 'Показать' }}
+      </button>
+
+      <br />
+      <hr />
+      <br />
+
+      <p><input type="text" v-model="company" /></p>
+      <ul>
+        <li v-for="phone in filteredList">
+          <p>{{ phone.title }} - {{ phone.company }}</p>
+        </li>
+      </ul>
+
+      <br />
+      <hr />
+      <br />
+
+      <table>
+        <tr>
+          <td><a @click="sortParam='title'">Модель</a></td>
+          <td><a @click="sortParam='company'">Компания</a></td>
+          <td><a @click="sortParam='price'">Цена</a></td>
+        </tr>
+        <tr v-for="phone in sortedList">
+          <td>{{phone.title}}</td>
+          <td>{{phone.company}}</td>
+          <td>{{phone.price}}</td>
+        </tr>
+      </table>
+
+      <br />
+      <hr />
+      <br />
+
+      <label>Логин</label>
+      <input
+        type="text"
+        v-model="login"
+        placeholder="Введите логин"
+        class="form-control"
+      /><br />
+      <label>Пароль</label>
+      <input
+        type="password"
+        v-model="password"
+        placeholder="Введите пароль"
+        class="form-control"
+      /><br />
+      <label>Возраст</label>
+      <input
+        type="number"
+        v-model="age"
+        min="18"
+        placeholder="Введите возраст"
+        class="form-control"
+      /><br />
+      <label>Дата регистрации</label><br />
+      <input
+        type="date"
+        v-model="date"
+        placeholder="Введите дату"
+        class="form-control"
+      />
+      <label>Введите комментарий</label>
+      <textarea v-model="comment" class="form-control"></textarea>
+      <br />
+      <div>
+        <h3>Введенная информация</h3>
+        <p>Логин: {{login}}</p>
+        <p>Пароль: {{password}}</p>
+        <p>Возраст: {{age}}</p>
+        <p>Дата регистрации: {{date}}</p>
+        <h3>Комментарий</h3>
+        <p style="white-space: pre-line">{{comment}}</p>
+      </div>
+
+      <br />
+      <hr />
+      <br />
+
+      <input type="checkbox" id="checkbox" v-model="checked" />
+      <label for="checkbox">{{ checked }}</label>
+
+      <input
+        type="checkbox"
+        v-model="light"
+        true-value="on"
+        false-value="off"
+      />
+      <span v-if="light==='on'">Выключить</span>
+      <span v-else>Включить</span>
+
+      <br />
+      <hr />
+      <br />
+
+      <input type="checkbox" value="Tom" v-model="selectedUsers" />
+      <label>Tom</label><br />
+      <input type="checkbox" value="Bob" v-model="selectedUsers" />
+      <label>Bob</label><br />
+      <input type="checkbox" value="Sam" v-model="selectedUsers" />
+      <label>Sam</label><br />
+      <input type="checkbox" value="Alice" v-model="selectedUsers" />
+      <label>Alice</label><br />
+      <span>Выбрано: {{selectedUsers}}</span>
+
+      <br />
+      <hr />
+      <br />
+
+      <template v-for="user in users">
+        <input type="checkbox" :value="user" v-model="selectedUsers" />
+        <label>{{user.name}}</label><br />
+      </template>
+
+      <br />
+      <hr />
+      <br />
+
+      <select v-model="user">
+        <option>Tom</option>
+        <option>Bob</option>
+        <option>Sam</option>
+      </select>
+      <span>Выбрано: {{user}}</span>
+
+      <br />
+      <hr />
+      <br />
+
+      <input v-model.trim="message" />
+      <span>Введено: {{message}}</span>
+    </div>
+
+    <script>
+      const { createApp } = Vue;
+
+      createApp({
+        data() {
+          return {
+            message: "   Hello Vue!   ",
+            visible: true,
+            company: "",
+            sortParam: "",
+            phones: [
+              { title: "iPhone 12", company: "Apple", price: 65000 },
+              { title: "Galaxy S20", company: "Samsung", price: 63000 },
+              { title: "Galaxy A10", company: "Samsung", price: 38000 },
+              { title: "iPhone 10", company: "Apple", price: 45000 },
+              { title: "Xiaomi Redmi 8", company: "Xiaomi", price: 42000 },
+            ],
+            login: "",
+            password: "",
+            date: "",
+            age: 25,
+            comment: "Комментарий...",
+            checked: true,
+            light: true,
+            selectedUsers: [],
+            users: [
+              { name: "Tom", age: 22 },
+              { name: "Bob", age: 25 },
+              { name: "Sam", age: 28 },
+              { name: "Alice", age: 26 },
+            ],
+            user: "",
+          };
+        },
+        computed: {
+          filteredList() {
+            let comp = this.company;
+            return this.phones.filter(function (elem) {
+              if (comp === "") return true;
+              else return elem.company.indexOf(comp) > -1;
+            });
+          },
+          sortedList() {
+            switch (this.sortParam) {
+              case "title":
+                return this.phones.sort(sortByTitle);
+              case "company":
+                return this.phones.sort(sortByCompany);
+              case "price":
+                return this.phones.sort(sortByPrice);
+              default:
+                return this.phones;
+            }
+          },
+        },
+      }).mount("#app");
+
+      const sortByTitle = (d1, d2) =>
+        d1.title.toLowerCase() > d2.title.toLowerCase() ? 1 : -1;
+      const sortByCompany = (d1, d2) =>
+        d1.company.toLowerCase() > d2.company.toLowerCase() ? 1 : -1;
+      const sortByPrice = (d1, d2) => (d1.price > d2.price ? 1 : -1);
+    </script>
+  </body>
+</html>

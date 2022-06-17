@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Познание Vue 3 по Metanit, Глава 1</title>
+    <style>
+      .region {
+        background-color: #999;
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        margin: 10px;
+      }
+      .active {
+        background-color: red;
+      }
+      .bounded {
+        border: 2px solid green;
+      }
+      .yellow {
+        background-color: yellow;
+      }
+      .red {
+        background-color: red;
+      }
+      .blue {
+        background-color: blue;
+      }
+      .green {
+        background-color: green;
+      }
+      .big {
+        width: 100px;
+        height: 100px;
+      }
+      .small {
+        width: 50px;
+        height: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://unpkg.com/vue@3"></script>
+
+    <div id="app">
+      <p>{{welcome()}}</p>
+      <p>{{displayUser()}}</p>
+
+      <p>{{tom.name}}</p>
+      <p>{{tom.age}}</p>
+      <p>{{tom.age > 25 ? 'Больше 25 лет' : '25 лет или меньше'}}</p>
+      <p>{{sayHello()}}</p>
+      <p>12 часов: {{ welcome(12) }}</p>
+      <p>22 часа: {{ welcome(22) }}</p>
+      <br />
+      <br />
+      <hr />
+      <p v-text="tom.name"></p>
+      <p v-text="tom.age"></p>
+
+      <br />
+      <br />
+      <hr />
+      <a :href="site.link">Перейти на сайт {{site.text}}</a>
+      <br />
+      <br />
+      <hr />
+      <p v-once>Здесь только первое значение {{tom.name}}</p>
+      <p>Здесь новое значение {{tom.name}}</p>
+
+      <br />
+      <br />
+      <hr />
+      <p v-html="addHTML('Привет')"></p>
+
+      <br />
+      <br />
+      <hr />
+      <button v-on:click="increase(4, $event)">+</button>
+      <span>{{counter}}</span>
+      <button v-on:click="decrease(2)">-</button>
+      <br />
+      <br />
+      <hr />
+
+      <p>
+        Введите имя:
+        <input type="text" v-model="userName" placeholder="Ваше имя" />
+      </p>
+      <p>Ваше имя: {{userName}}</p>
+
+      <p>
+        Введите фамилию:
+        <input
+          type="text"
+          placeholder="Ваше имя"
+          v-on:input="userSurname = $event.target.value"
+          v-bind:value="userSurname"
+        />
+      </p>
+      <p>Ваше имя: {{userSurname}}</p>
+
+      <br />
+      <br />
+      <hr />
+      <p>
+        Ширина
+        <input
+          type="number"
+          placeholder="Введите ширину"
+          v-model="width"
+          step="3"
+        />
+      </p>
+      <p>
+        Ширина
+        <input type="number" placeholder="Введите высоту" v-model="height" />
+      </p>
+      <p>Площадь фигуры: {{!(width * height) ? "" : width * height}}</p>
+
+      <br />
+      <br />
+      <hr />
+
+      <input type="text" v-model="tom.name" />
+      <input type="text" v-model="tom.age" />
+      <p>Имя: {{tom.name}} и Возраст {{tom.age}}</p>
+      <p>{{checkAge}}</p>
+
+      <br />
+      <br />
+      <hr />
+
+      <input type="text" v-model="firstname" />
+      <input type="text" v-model="lastname" />
+      <input type="text" v-model="fullname" />
+      <p>{{fullname}}</p>
+
+      <br />
+      <br />
+      <hr />
+
+      <p>введите возраст <input type="number" v-model.lazy="age" /></p>
+      <p>{{result}}</p>
+
+      <br />
+      <br />
+      <hr />
+      <div class="region" :class="classObj"></div>
+      <button v-on:click="isActive=!isActive">Toggle color</button>
+      <button v-on:click="isBounded=!isBounded">Toggle border</button>
+      <div>isActive = {{isActive}}</div>
+
+      <br />
+      <br />
+      <hr />
+      <div class="region" :class="color,size"></div>
+      <input type="text" v-model="color" />
+      <input type="text" v-model="size" />
+
+      <br />
+      <br />
+      <hr />
+      <h2 ref="header">Hello, World!</h2>
+      <button v-on:click="change">Change title</button>
+    </div>
+
+    <script>
+      const tom = {
+        name: "Tom",
+        age: 36,
+      };
+
+      const site = {
+        text: "Google",
+        title: "google.com",
+        link: "https://google.com",
+      };
+
+      const vueApp = Vue.createApp({
+        data() {
+          return {
+            tom,
+            site,
+            counter: 0,
+            userName: "Leon",
+            userSurname: "Madleon",
+            width: 0,
+            height: 0,
+            firstname: "Robert",
+            lastname: "Levandovski",
+            age: 0,
+            result: "",
+            isActive: false,
+            isBounded: false,
+            color: "",
+            size: "",
+          };
+        },
+        watch: {
+          age(newAge) {
+            if (newAge > 0 && newAge < 110) {
+              this.check(newAge);
+            }
+          },
+        },
+        methods: {
+          check(value) {
+            this.result = "Пожалуйста, подождите. Идет проверка...";
+            setTimeout(() => {
+              if (value > 18) this.result = "Доступ открыт";
+              else this.result = "Доступ для возраста " + value + " закрыт";
+            }, 2000);
+          },
+          sayHello() {
+            return `Привет, меня зовут ${this.tom.name}`;
+          },
+          welcome(hour) {
+            if (hour > 21) return "Доброй ночи.";
+            else if (hour > 16) return "Добрый вечер!";
+            else if (hour > 11) return "Добрый день";
+            else return "Доброе утро";
+          },
+          displayUser() {
+            return "UserInfo: name " + this.tom.name + ", age " + this.tom.age;
+          },
+
+          incrementAge() {
+            this.tom.age++;
+          },
+
+          incrementAgeThreeTimes(times = 1) {
+            for (let i = 0; i < times; i++) {
+              this.incrementAge();
+            }
+          },
+          addHTML(value) {
+            return `<h2>${value}</h2>`;
+          },
+          increase(n, event) {
+            console.log(event);
+            this.counter += n;
+          },
+          decrease(n) {
+            if (this.counter > 0) this.counter -= n;
+          },
+          change() {
+            this.$refs.header.textContent = "Welcome to Vue 3.";
+          },
+        },
+        computed: {
+          classObj() {
+            return {
+              active: this.isActive,
+              bounded: this.isBounded,
+            };
+          },
+          checkAge: function () {
+            console.log("checkAge");
+            return this.tom.age > 18 ? "Доступ разрешен" : "Доступ запрещен";
+          },
+          fullname: {
+            get: function () {
+              return this.firstname + " " + this.lastname;
+            },
+            set: function (newValue) {
+              const names = newValue.split(" ");
+              this.firstname = names[0];
+              this.lastname = names[names.length - 1];
+            },
+          },
+        },
+      }).mount("#app");
+
+      vueApp.incrementAgeThreeTimes(3);
+
+      vueApp.tom.name = "Илюха";
+    </script>
+  </body>
+</html>
